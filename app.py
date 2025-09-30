@@ -116,6 +116,7 @@ if not st.session_state.access_token:
     password = st.text_input("Password", type="password")
 
     if mode == "Register":
+
         full_name = st.text_input("Full Name")
         phone_number = st.text_input("Phone Number")
         if st.button("Register"):
@@ -123,7 +124,10 @@ if not st.session_state.access_token:
             if res.status_code == 200:
                 st.success(res.json().get("msg", "Registration successful"))
             else:
-                st.error(res.json().get("msg", res.text))
+                try:
+                    st.error(res.json().get("msg", res.text))
+                except Exception:
+                    st.error(res.text)
 
     if mode == "Login":
         if st.button("Login"):
@@ -160,9 +164,40 @@ else:
             st.markdown(f'<div class="bot-bubble">{msg["content"]}</div>', unsafe_allow_html=True)
 
     # Chat input (auto-clears after send)
-    if user_input := st.chat_input("Type your message..."):
-        st.session_state.messages.append({"role": "user", "content": user_input})
+    # if user_input := st.chat_input("Type your message..."):
+    #     st.session_state.messages.append({"role": "user", "content": user_input})
 
+    #     res = send_message(
+    #         st.session_state.organization_id,
+    #         st.session_state.user_id,
+    #         st.session_state.assistant_session_id,
+    #         st.session_state.access_token,
+    #         user_input,
+    #         st.session_state.phone_number
+    #     )
+
+    #     if res.status_code == 200:
+    #         try:
+    #             data = res.json()
+    #             bot_text = data.get("response", "") if isinstance(data, dict) else str(data)
+    #         except ValueError:
+    #             bot_text = res.text.strip()
+
+    #         # Add bot message to history
+    #         st.session_state.messages.append({"role": "assistant", "content": bot_text})
+
+    #         # Show with typing effect
+    #         type_response(bot_text)
+
+    #     else:
+    #         st.error(res.text)
+
+    if user_input := st.chat_input("Type your message..."):
+        # Add user message
+        st.session_state.messages.append({"role": "user", "content": user_input})
+        st.markdown(f'<div class="user-bubble">{user_input}</div>', unsafe_allow_html=True)
+
+        # Send to API
         res = send_message(
             st.session_state.organization_id,
             st.session_state.user_id,
@@ -187,4 +222,3 @@ else:
 
         else:
             st.error(res.text)
-
