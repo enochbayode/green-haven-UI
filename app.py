@@ -3,7 +3,8 @@ import streamlit as st
 import requests
 import time
 
-BASE_URL = "https://green-haven-706451831123.us-central1.run.app/api"
+# BASE_URL = "https://green-haven-706451831123.us-central1.run.app/api"
+BASE_URL="https://green-haven-m86nx.ondigitalocean.app/api"
 
 # ------------------------
 # API Functions
